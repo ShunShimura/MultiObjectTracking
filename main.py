@@ -113,4 +113,8 @@ file_image_pil = []
 for i in range(len(file_image)):
     file_image_pil.append(Image.open(file_image[i]))
     
-mod.combine_tracklets_and_images(tracklets, file_image_pil, "fig")
+# data output 
+output_folder = "output/identification"
+os.makedirs(output_folder, exist_ok=True)
+for t in range(len(model.I)):
+    np.savetxt(output_folder+"/time"+str(t).zfill(3)+".txt", model.I[t], delimiter=",", fmt="%d")
