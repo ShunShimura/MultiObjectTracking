@@ -1,6 +1,6 @@
-from modules import GaussProcess as gp
-from modules import OptimalTransport as ot
-from modules import KalmanFilter as kf
+from src import GaussProcess as gp
+from src import OptimalTransport as ot
+from src import KalmanFilter as kf
 from decimal import Decimal, ROUND_HALF_UP, ROUND_HALF_EVEN
 import math
 import numpy as np
