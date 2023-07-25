@@ -36,7 +36,7 @@ def main2(C, SamplingNumber, size): # 予測位置マッチング
         if not isinstance(C[t], str) and not isinstance(C[t+1], str):
             prdC = gpt1.predictC(np.zeros((size+1, size+1)))
             predicts.append(prdC[0])
-            ID, _ = gpt1.generateID(prdC, C[t+1], d=20)
+            ID, _ = gpt1.generateID(prdC, C[t+1], d=5)
         elif isinstance(C[t], str) and not isinstance(C[t+1], str):
             ID = gpt1.generateNewID(len(C[t+1]))
         elif isinstance(C[t+1], str):
