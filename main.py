@@ -6,7 +6,6 @@ import warnings
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from PIL import Image
-from src import module as mod
 
 def main1(C, SamplingNumber, size): # 位置マッチング
     gpt1 = gpt.GaussProcessTracking(C, 10)
