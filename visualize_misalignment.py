@@ -9,4 +9,10 @@ for i in range(len(fname)):
     df = np.loadtxt(fname[i], delimiter=",")
     misalignments.append(df[1])
     
-print(misalignments)
+fig = plt.figure(figsize=(8, 5))
+ax = fig.add_subplot(111)
+ax.plot(list(range(1, 51)), misalignments)
+ax.set_xlabel("threshold d")
+ax.set_ylabel("mean of misalignment between obs and pred")
+ax.set_ylim(bottom=0)
+fig.savefig("output/misalignment.pdf")

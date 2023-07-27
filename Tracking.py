@@ -18,7 +18,7 @@ class GaussProcessTracking():
         self.I = []
         self.dt = 1
         self.size = size
-        self.IDset = set(list(range(1000)))
+        self.IDset = set(list(range(10000000)))
         self.I.append(list(range(len(self.C[0]))))
         for i in range(len(self.C[0])):
             self.IDset.remove(min(self.IDset))
