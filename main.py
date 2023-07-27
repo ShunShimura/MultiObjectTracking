@@ -6,6 +6,7 @@ import warnings
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from PIL import Image
+import sys
 
 def main1(C, SamplingNumber, size): # 位置マッチング
     gpt1 = gpt.GaussProcessTracking(C, 10)
@@ -53,8 +54,8 @@ def main3(C, SamplingNumber, size): # 予測位置×力学予測マッチング
     ID = gpt1.generateID(C[0], C[1])
     gpt1.I.append(ID)
     for t in range(1, gpt1.T-1):
-        print("\n-----------------------------------")
-        print("t = "+str(t).zfill(3))
+#        print("\n-----------------------------------")
+#        print("t = "+str(t).zfill(3))
         if not isinstance(C[t], str) and not isinstance(C[t+1], str):
             Forces = gpt1.sampling()
             MaxScore = 0
@@ -113,14 +114,13 @@ os.makedirs(output_folder, exist_ok=True)
 for t in range(len(model.I)):
     np.savetxt(output_folder+"/time"+str(t).zfill(3)+".txt", model.I[t], delimiter=",", fmt="%d")
 """
-    
-misalignments = []
-for d in range(1, 51):
-    model, misalignment = main2(C, SamplingNumber, size, d=d)
-    output_folder_ID = "output/d"+str(d).zfill(2)+"/identification"
-    os.makedirs(output_folder_ID, exist_ok=True)
-    for t in range(len(model.I)):
-        np.savetxt(output_folder_ID+"/time"+str(t).zfill(3)+".txt", model.I[t], delimiter=",", fmt="%d")
-    misalignments.append(misalignment)
 
-np.savetxt("output/misalignment.txt", [list(range(1, 51)), misalignments], delimiter=",", fmt="%d")
+d = sys.argv[1]
+print("\n", "-"*50)
+print("d = "+str(d).zfill(2))
+model, misalignment = main2(C, SamplingNumber, size, d=d)
+output_folder_ID = "output/d"+str(d).zfill(2)+"/identification"
+os.makedirs(output_folder_ID, exist_ok=True)
+for t in range(len(model.I)):
+    np.savetxt(output_folder_ID+"/time"+str(t).zfill(3)+".txt", model.I[t], delimiter=",", fmt="%d")
+np.savetxt("output/d"+str(d).zfill(2)+"/misalignment.txt", [d, misalignment], delimiter=",", fmt="%d")
