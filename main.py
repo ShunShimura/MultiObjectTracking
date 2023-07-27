@@ -33,8 +33,8 @@ def main2(C, SamplingNumber, size, d=5): # 予測位置マッチング
     gpt1.I.append(ID)
     sum_misalignment, sum_number_match = 0, 0
     for t in range(1, gpt1.T-1):
-        print("\n-----------------------------------")
-        print("t = "+str(t).zfill(3))
+#        print("\n-----------------------------------")
+#        print("t = "+str(t).zfill(3))
         if not isinstance(C[t], str) and not isinstance(C[t+1], str):
             prdC = gpt1.predictC(np.zeros((size+1, size+1)))
             predicts.append(prdC[0])
@@ -74,6 +74,10 @@ def main3(C, SamplingNumber, size): # 予測位置×力学予測マッチング
 
 #########################################################################################################
 
+d = int(sys.argv[1])
+print("\n", "-"*50)
+print("d = "+str(d).zfill(2))
+
 # data load
 data_folder = "real_data"
 file_name = gl.glob(data_folder+"/*")
@@ -95,6 +99,7 @@ for FileName in file_name:
 SamplingNumber = 1
 size = 100
 
+"""
 #number = int(input("Please write number 1 to 7 : "))
 number = 2
 
@@ -107,7 +112,6 @@ elif number == 3:
 else:
     print("number should be 1 to 3 !")
 
-"""    
 # data output 
 output_folder = "output/identification"
 os.makedirs(output_folder, exist_ok=True)
@@ -115,10 +119,11 @@ for t in range(len(model.I)):
     np.savetxt(output_folder+"/time"+str(t).zfill(3)+".txt", model.I[t], delimiter=",", fmt="%d")
 """
 
-d = sys.argv[1]
-print("\n", "-"*50)
-print("d = "+str(d).zfill(2))
+print("tracking...")
 model, misalignment = main2(C, SamplingNumber, size, d=d)
+
+# ouput 
+print("outputting...")
 output_folder_ID = "output/d"+str(d).zfill(2)+"/identification"
 os.makedirs(output_folder_ID, exist_ok=True)
 for t in range(len(model.I)):
