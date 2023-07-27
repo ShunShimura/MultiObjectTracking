@@ -137,7 +137,7 @@ class GaussProcessTracking():
                     C[i, j] = math.dist(c1[i], c2[j])
                 else:
                     C[i, j] = d
-        X, score = ot.OptimalTransport(C, X)
+        X, misalignment, number_match = ot.OptimalTransport(C, X)
         X = X[:N, :M]
         NewID = []
         for j in range(M):
@@ -148,7 +148,7 @@ class GaussProcessTracking():
             else:
                 NewID.append(min(self.IDset))
                 self.IDset.remove(min(self.IDset))
-        return NewID, score
+        return NewID, misalignment, number_match
     
     def back_generateID(self, c1, c2, updated_t):
         d=.2*self.size

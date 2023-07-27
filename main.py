@@ -23,26 +23,29 @@ def main1(C, SamplingNumber, size): # 位置マッチング
         gpt1.I.append(ID)
     return gpt1
 
-def main2(C, SamplingNumber, size): # 予測位置マッチング
+def main2(C, SamplingNumber, size, d=5): # 予測位置マッチング
     predicts, detects = [], []
     for c in C:
         if not isinstance(c, str): detects.append(c[0])
     gpt1 = gpt.GaussProcessTracking(C, 10)
-    ID, _ = gpt1.generateID(C[0], C[1])
+    ID, _, _ = gpt1.generateID(C[0], C[1])
     gpt1.I.append(ID)
+    sum_misalignment, sum_number_match = 0, 0
     for t in range(1, gpt1.T-1):
         print("\n-----------------------------------")
         print("t = "+str(t).zfill(3))
         if not isinstance(C[t], str) and not isinstance(C[t+1], str):
             prdC = gpt1.predictC(np.zeros((size+1, size+1)))
             predicts.append(prdC[0])
-            ID, _ = gpt1.generateID(prdC, C[t+1], d=5)
+            ID, misalignment, number_match = gpt1.generateID(prdC, C[t+1], d=d)
+            sum_misalignment += misalignment
+            sum_number_match += number_match
         elif isinstance(C[t], str) and not isinstance(C[t+1], str):
             ID = gpt1.generateNewID(len(C[t+1]))
         elif isinstance(C[t+1], str):
             ID = []
         gpt1.I.append(ID)
-    return gpt1
+    return gpt1, sum_misalignment/sum_number_match
 
 def main3(C, SamplingNumber, size): # 予測位置×力学予測マッチング
     #print("めっちゃ時間かかるよーーーー")
@@ -102,18 +105,22 @@ elif number == 3:
     model = main4(C, SamplingNumber, size)
 else:
     print("number should be 1 to 3 !")
-    
-#model.visualize("fig", "result.pdf")
-tracklets = model.get_tracklets()
-images_folder = "image_data"
-file_image = gl.glob(images_folder+"/*")
-file_image.sort()
-file_image_pil = []    
-for i in range(len(file_image)):
-    file_image_pil.append(Image.open(file_image[i]))
-    
+
+"""    
 # data output 
 output_folder = "output/identification"
 os.makedirs(output_folder, exist_ok=True)
 for t in range(len(model.I)):
     np.savetxt(output_folder+"/time"+str(t).zfill(3)+".txt", model.I[t], delimiter=",", fmt="%d")
+"""
+    
+misalignments = []
+for d in range(1, 51):
+    model, misalignment = main2(C, SamplingNumber, size, d=d)
+    output_folder_ID = "output/d"+str(d).zfill(2)+"/identification"
+    os.makedirs(output_folder_ID, exist_ok=True)
+    for t in range(len(model.I)):
+        np.savetxt(output_folder_ID+"/time"+str(t).zfill(3)+".txt", model.I[t], delimiter=",", fmt="%d")
+    misalignments.append(misalignment)
+
+np.savetxt("output/misalignment.txt", [list(range(1, 51)), misalignments], delimiter=",", fmt="%d")

@@ -14,9 +14,10 @@ def OptimalTransport(C, T):
     problem += total_cost
     status = problem.solve(pulp.PULP_CBC_CMD(msg=False))
     T_star = np.array([[Transport[i][j].value() for j in range(m)] for i in range(n)])
-    score = 0
+    misalignment, number_match = 0, 0
     for i in range(len(C)):
         for j in range(len(C[i])):
-            if T_star[i, j] == 1:
-                score += C[i][j]
-    return T_star, 1/score
+            if abs(T_star[i, j] - 1) < 1e6:
+                number_match += 1
+                misalignment += C[i][j]
+    return T_star, misalignment, number_match
