@@ -29,7 +29,7 @@ def main2(C, SamplingNumber, size, d=5): # 予測位置マッチング
     for c in C:
         if not isinstance(c, str): detects.append(c[0])
     gpt1 = gpt.GaussProcessTracking(C, 10)
-    ID, _, _ = gpt1.generateID(C[0], C[1])
+    ID, _, _ = gpt1.generateID(C[0], C[1], d=d)
     gpt1.I.append(ID)
     sum_misalignment, sum_number_match = 0, 0
     for t in range(1, gpt1.T-1):
@@ -93,7 +93,6 @@ for FileName in file_name:
                 df = np.array([df])
             df = df[:, :2] / 20.48
             df = np.unique(df, axis=0)
-            print(df)
             C.append(df)
         except UserWarning:
             C.append("nan")
