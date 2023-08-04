@@ -91,11 +91,14 @@ for FileName in file_name:
             df = np.loadtxt(FileName, delimiter=",")
             if df.ndim == 1:
                 df = np.array([df])
+            df = df[:, :2] / 20.48
+            print(df)
             C.append(df)
         except UserWarning:
             C.append("nan")
         except IOError:
             C.append("nan")
+#for c in C : print(c)
         
 SamplingNumber = 1
 size = 100
