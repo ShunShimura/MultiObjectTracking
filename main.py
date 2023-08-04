@@ -92,6 +92,7 @@ for FileName in file_name:
             if df.ndim == 1:
                 df = np.array([df])
             df = df[:, :2] / 20.48
+            df = np.unique(df, axis=0)
             print(df)
             C.append(df)
         except UserWarning:
