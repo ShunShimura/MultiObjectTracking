@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from PIL import Image
 import sys
+import shutil
 
 def main1(C, SamplingNumber, size): # 位置マッチング
     gpt1 = gpt.GaussProcessTracking(C, 10)
@@ -75,7 +76,6 @@ def main3(C, SamplingNumber, size): # 予測位置×力学予測マッチング
 #########################################################################################################
 
 d = int(sys.argv[1])
-print("\n")
 print("-"*50)
 print("d = "+str(d).zfill(2))
 
