@@ -7,4 +7,4 @@ done
 
 wait
 
-python visualize_misalignment.py
+python visualize_all_distance.py

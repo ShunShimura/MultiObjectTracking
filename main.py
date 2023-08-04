@@ -46,7 +46,7 @@ def main2(C, SamplingNumber, size, d=5): # 予測位置マッチング
         elif isinstance(C[t+1], str):
             ID = []
         gpt1.I.append(ID)
-    return gpt1, sum_misalignment/sum_number_match
+    return gpt1, sum_misalignment/sum_number_match, sum_number_match
 
 def main3(C, SamplingNumber, size): # 予測位置×力学予測マッチング
     #print("めっちゃ時間かかるよーーーー")
@@ -124,7 +124,7 @@ for t in range(len(model.I)):
 """
 
 print("tracking...")
-model, misalignment = main2(C, SamplingNumber, size, d=d)
+model, misalignment, number_cell = main2(C, SamplingNumber, size, d=d)
 
 # ouput 
 print("outputting...")
@@ -132,4 +132,5 @@ output_folder_ID = "output/d"+str(d).zfill(2)+"/identification"
 os.makedirs(output_folder_ID, exist_ok=True)
 for t in range(len(model.I)):
     np.savetxt(output_folder_ID+"/time"+str(t).zfill(3)+".txt", model.I[t], delimiter=",", fmt="%d")
-np.savetxt("output/d"+str(d).zfill(2)+"/misalignment.txt", [d, misalignment], delimiter=",", fmt="%d")
+number_cell = max(model.I[-1])
+np.savetxt("output/d"+str(d).zfill(2)+"/evaluation.txt", [number_cell, misalignment], delimiter=",", fmt="%.3f")
